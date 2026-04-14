@@ -1,0 +1,5 @@
+# Every PR needs an approval from one of these people
+* @wswalker87 @Duzel33 @pioneeremory @JoseMMedranoJr
+
+# Only the "CSS expert" needs to approve changes to styles
+*.css   @JoseMMedranoJr

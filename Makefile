@@ -4,17 +4,27 @@
         backend frontend dev clean-start freeze-local freeze-docker
 
 help: ## Show this help message
-	@echo "Town Pulse Development CLI"
-	@echo "--------------------------"
-	@usage
+		@echo "Town Pulse Development CLI"
+		@echo "--------------------------"
+		@$(usage)
 
 # Define the documentation here
+# \033[36m<command>\033[0m    Command help description\n
 define usage
-	@printf "\033[36mdev\033[0m          Run DB in Docker + Django/Vite locally\n"
-	@printf "\033[36mclean-start\033[0m  Kill zombie ports and reset Docker\n"
-	@printf "\033[36mstop\033[0m         Full shutdown (saves AWS/API costs)\n"
-	@printf "\033[36mmigrate\033[0m      Sync Django database schema\n"
-	@printf "\033[36mbuild\033[0m        Rebuild Docker containers\n"
+	@printf " \033[36mdev\033[0m           Run DB in Docker + Django/Vite locally\n\
+\033[36mclean-start\033[0m   Kill zombie ports and reset Docker\n\
+\033[36mstop\033[0m          Full shutdown (saves AWS/API costs)\n\
+\033[36mmigrate\033[0m       Sync Django database schema\n\
+\033[36mbuild\033[0m         Rebuild Docker containers\n\
+\033[36msuperuser\033[0m     Create superuser in Django\n\
+\033[36mshell\033[0m         Open Django shell\n\
+\033[36mbackend\033[0m       Start backend only\n\
+\033[36mfrontend\033[0m      Start frontend only\n\
+\033[36mlogs\033[0m          Start the docker logs\n\
+\033[36mdb-check\033[0m      Complete a db health check\n\
+\033[36mfreeze-local\033[0m  Pip freeze on local device\n\
+\033[36mfreeze-docker\033[0m Pip freeze on docker stack\n\
+\033[36mdestroy\033[0m       Destroy your hard drive, gfx card, and soul\n"
 endef
 
 
@@ -90,8 +100,14 @@ frontend:
 # Runs DB in Docker; Django + Vite run locally in parallel.
 # Requires a Unix-like shell (bash/zsh/WSL) for job-control (&).
 dev:
+	# Start DB
 	$(DOCKER_COMPOSE) up -d db
-	(cd backend && $(VENV_ACTIVATE) && python manage.py runserver &)
+	# Kill any existing local servers first to avoid port conflicts
+	-$(KILL_8000)
+	-$(KILL_5173)
+	# Run backend in background from the ROOT
+	$(VENV_ACTIVATE) && cd backend && python manage.py runserver &
+	# Run frontend in foreground
 	cd frontend && npm run dev
 
 # ── Utilities ─────────────────────────────────────────────────────────────────

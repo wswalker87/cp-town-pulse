@@ -1,0 +1,12 @@
+2026-04-20 - Scott
+Inside Navbar.jsx, MUIfied things. 
+- Replaced setPage with Link and useNavigate to make the back button work
+- token is looked for instead of tp_logged_in
+- add MUI icons
+-
+
+App.jsx
+- MUIfied it. 
+- Changed main color to a gov blue
+- stuck the footer to the bootom
+- setup /saved and / routes

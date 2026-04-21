@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'townpulse_app',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'corsheaders',
 ]
 
@@ -74,17 +77,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'town_pulse.wsgi.application'
 
+load_dotenv() # Load .env file variables
+DB_HOST = os.getenv('DB_HOST', '127.0.0.1')
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': os.getenv('DB_NAME', 'invert_db'),
+        'NAME': 'townpulse_db',
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+        # 'HOST': os.getenv('DB_HOST', 'db'), # 'db' matches the service name in docker-compose
+        'HOST': DB_HOST,
+        'PORT': os.getenv('DB_PORT', '5432'), # default port
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -138,3 +148,21 @@ SEATTLE_SOCRATA_DOMAIN = os.environ.get('SEATTLE_SOCRATA_DOMAIN', 'data.seattle.
 SEATTLE_SOCRATA_DATASET_ID = os.environ.get('SEATTLE_SOCRATA_DATASET_ID', '6853-bgsc')
 SEATTLE_SOCRATA_DATE_FIELD = os.environ.get('SEATTLE_SOCRATA_DATE_FIELD', 'date')
 SEATTLE_SOCRATA_APP_TOKEN = os.environ.get('SEATTLE_SOCRATA_APP_TOKEN', '')
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication', # Optional, for browsable API
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated', # This makes /me/ protected
+    ],
+}
+
+AUTH_PASSWORD_VALIDATORS = [] # Disable all checks for local development

@@ -93,5 +93,5 @@ Some examples of this format would be:
 ## Built By
 * **Jose Medrano** - [GitHub](https://github.com/JoseMMedranoJr) | [LinkedIn](linkedin.com/in/josemmedranojr)
 * **Logan Pederson** - [GitHub](https://github.com/pioneeremory) | [LinkedIn](https://www.linkedin.com/in/logan-pederson/)
-* **Nicholas Van Doren** - [GitHub](https://github.com/Duzel33) | [LinkedIn](link)
+* **Nicholas Van Doren** - [GitHub](https://github.com/Duzel33) | [LinkedIn](https://www.linkedin.com/in/nicholasvandoren/)
 * **W. Scott Walker** - [GitHub](https://github.com/wswalker87) | [LinkedIn](www.linkedin.com/in/scottwalkerdev)

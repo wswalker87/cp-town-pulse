@@ -16,15 +16,11 @@ export default function Navbar({ mode, toggleColorMode }) {
             if (!token) return
 
             try {
-                const response = await api.get('/auth/users/me/', {
-            headers: {
-                Authorization: `Token ${token}` 
-            }
-        })
-        // Axios wraps the response in a 'data' object
-        setUser(response.data)
+                const response = await api.get('/auth/users/me/')
+                // client.js interceptor already unwraps response.data, so we just pass response
+                setUser(response)
             } catch (err) {
-                if (err.status === 401) {
+                if (err.response?.status === 401) {
                     localStorage.removeItem("token")
                     setUser(null)
                 }
@@ -33,16 +29,10 @@ export default function Navbar({ mode, toggleColorMode }) {
         fetchUser()
 }, [])
 
-  function handleLogin() {
-    setIsLoggedIn(true)
-    setPage('dashboard')
-    localStorage.setItem('tp_logged_in', 'true')
-  }
-
   function handleLogout() {
-    setIsLoggedIn(false)
-    setPage('signin')
-    localStorage.removeItem('tp_logged_in')
+    localStorage.removeItem('token')
+    setUser(null)
+    navigate('/login')
   }
 
       return (
@@ -56,17 +46,16 @@ export default function Navbar({ mode, toggleColorMode }) {
                     style={{ cursor: 'pointer' }}
                 >
                         <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-                            Invertikeeper
+                            Town Pulse
                         </Link>
                 </Typography>
 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Button
                         color="inherit"
-                        // onClick={() => navigate('/collection')}
-                        component={Link} to="/collection"
+                        component={Link} to="/saved"
                     >
-                        My Collection
+                        Saved Events
                     </Button>
                 
                     {user ? (

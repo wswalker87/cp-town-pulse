@@ -49,7 +49,7 @@ else
     KILL_8000    := fuser -k 8000/tcp 2>/dev/null || true
     KILL_5173    := fuser -k 5173/tcp 2>/dev/null || true
     VENV_PYTHON  := backend/venv/bin/python
-    VENV_ACTIVATE := . backend/venv/bin/activate
+    VENV_ACTIVATE := . venv/bin/activate
 endif
 
 # ── Docker Compose ────────────────────────────────────────────────────────────
@@ -106,7 +106,7 @@ dev:
 	-$(KILL_8000)
 	-$(KILL_5173)
 	# Run backend in background from the ROOT
-	$(VENV_ACTIVATE) && cd backend && python manage.py runserver &
+	(cd backend && . venv/bin/activate && python3 manage.py runserver) &
 	# Run frontend in foreground
 	cd frontend && npm run dev
 

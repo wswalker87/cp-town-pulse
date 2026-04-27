@@ -105,6 +105,8 @@ dev:
 	# Kill any existing local servers first to avoid port conflicts
 	-$(KILL_8000)
 	-$(KILL_5173)
+	# start the venv
+	cd backend && $(VENV_ACTIVATE)
 	# Run backend in background from the ROOT
 	(cd backend && . venv/bin/activate && python3 manage.py runserver) &
 	# Run frontend in foreground
